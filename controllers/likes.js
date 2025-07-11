@@ -1,4 +1,5 @@
 const ClothingItem = require("../models/clothingItem");
+const { DEFAULT_ERROR, NOT_FOUND_ERROR } = require("../utils/errors");
 
 const likeItem = (req, res) =>
   ClothingItem.findByIdAndUpdate(
@@ -11,12 +12,12 @@ const likeItem = (req, res) =>
     .catch((err) => {
       console.error(err);
       if (err.name === "DocumentNotFoundError") {
-        return res.status(404).send({ message: err.message });
+        return res.status(404).send({ message: NOT_FOUND_ERROR });
       }
       if (err.name === "CastError") {
-        return res.status(400).send({ message: err.message });
+        return res.status(400).send({ message: "Invalid data" });
       }
-      return res.status(500).send({ message: err.message });
+      return res.status(500).send({ message: DEFAULT_ERROR });
     });
 
 const dislikeItem = (req, res) =>
@@ -30,12 +31,12 @@ const dislikeItem = (req, res) =>
     .catch((err) => {
       console.error(err);
       if (err.name === "DocumentNotFoundError") {
-        return res.status(404).send({ message: err.message });
+        return res.status(404).send({ message: NOT_FOUND_ERROR });
       }
       if (err.name === "CastError") {
-        return res.status(400).send({ message: err.message });
+        return res.status(400).send({ message: "Invalid data" });
       }
-      return res.status(500).send({ message: err.message });
+      return res.status(500).send({ message: DEFAULT_ERROR });
     });
 
 module.exports = {

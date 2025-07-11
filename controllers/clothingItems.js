@@ -1,18 +1,19 @@
 const ClothingItem = require("../models/clothingItem");
+const { DEFAULT_ERROR, NOT_FOUND_ERROR } = require("../utils/errors");
 
 const createItem = (req, res) => {
-  const { name, weather, imageURL, owner } = req.body;
+  const { name, weather, imageUrl } = req.body;
 
-  ClothingItem.create({ name, weather, imageURL, owner })
+  ClothingItem.create({ name, weather, imageUrl, owner: req.user._id })
     .then((items) => {
-      res.status(201).send(items);
+      res.status(200).send(items);
     })
     .catch((err) => {
       console.error(err);
       if (err.name === "ValidationError") {
-        return res.status(400).send({ message: err.message });
+        return res.status(400).send({ message: "Invalid data" });
       }
-      return res.status(500).send({ message: err.message });
+      return res.status(500).send({ message: DEFAULT_ERROR });
     });
 };
 
@@ -23,7 +24,7 @@ const getItems = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
-      return res.status(500).send({ message: err.message });
+      return res.status(500).send({ message: DEFAULT_ERROR });
     });
 };
 
@@ -32,18 +33,21 @@ const deleteItem = (req, res) => {
 
   ClothingItem.findByIdAndDelete(itemId)
     .orFail()
-    .then((items) => {
-      res.status(204).send();
+    .then((item) => {
+      res.status(200).send({
+        message: "Item deleted successfully",
+        item,
+      });
     })
     .catch((err) => {
       console.error(err);
       if (err.name === "DocumentNotFoundError") {
-        return res.status(404).send({ message: err.message });
+        return res.status(404).send({ message: NOT_FOUND_ERROR });
       }
       if (err.name === "CastError") {
-        return res.status(400).send({ message: err.message });
+        return res.status(400).send({ message: "Invalid data" });
       }
-      return res.status(500).send({ message: err.message });
+      return res.status(500).send({ message: DEFAULT_ERROR });
     });
 };
 
