@@ -1,5 +1,9 @@
 const ClothingItem = require("../models/clothingItem");
-const { DEFAULT_ERROR, NOT_FOUND_ERROR } = require("../utils/errors");
+const {
+  DEFAULT_ERROR,
+  NOT_FOUND_ERROR,
+  BAD_REQUEST_ERROR,
+} = require("../utils/errors");
 
 const createItem = (req, res) => {
   const { name, weather, imageUrl } = req.body;
@@ -11,9 +15,11 @@ const createItem = (req, res) => {
     .catch((err) => {
       console.error(err);
       if (err.name === "ValidationError") {
-        return res.status(400).send({ message: "Invalid data" });
+        return res.status(BAD_REQUEST_ERROR).send({ message: "Invalid data" });
       }
-      return res.status(500).send({ message: DEFAULT_ERROR });
+      res
+        .status(DEFAULT_ERROR)
+        .send({ message: "An error has occurred on the server." });
     });
 };
 
@@ -24,7 +30,9 @@ const getItems = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
-      return res.status(500).send({ message: DEFAULT_ERROR });
+      res
+        .status(DEFAULT_ERROR)
+        .send({ message: "An error has occurred on the server." });
     });
 };
 
@@ -42,12 +50,16 @@ const deleteItem = (req, res) => {
     .catch((err) => {
       console.error(err);
       if (err.name === "DocumentNotFoundError") {
-        return res.status(404).send({ message: NOT_FOUND_ERROR });
+        return res
+          .status(NOT_FOUND_ERROR)
+          .send({ message: "The requested resource was not found." });
       }
       if (err.name === "CastError") {
-        return res.status(400).send({ message: "Invalid data" });
+        return res.status(BAD_REQUEST_ERROR).send({ message: "Invalid data" });
       }
-      return res.status(500).send({ message: DEFAULT_ERROR });
+      res
+        .status(DEFAULT_ERROR)
+        .send({ message: "An error has occurred on the server." });
     });
 };
 

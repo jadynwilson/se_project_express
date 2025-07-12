@@ -9,7 +9,9 @@ router.use("/items", itemRouter);
 router.use("/items", likesRouter);
 
 router.use((req, res) => {
-  res.status(404).send({ message: NOT_FOUND_ERROR });
+  res
+    .status(NOT_FOUND_ERROR)
+    .send({ message: "The requested resource was not found." });
 });
 
 module.exports = router;
