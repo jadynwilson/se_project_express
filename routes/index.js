@@ -3,6 +3,14 @@ const userRouter = require("./users");
 const itemRouter = require("./clothingItems");
 const likesRouter = require("./likes");
 const { NOT_FOUND_ERROR } = require("../utils/errors");
+const auth = require("../middlewares/auth");
+const { createUser, login } = require("../controllers/users");
+
+router.post("/signup", createUser);
+router.post("/signin", login);
+router.get("/items", itemRouter);
+
+router.use(auth);
 
 router.use("/users", userRouter);
 router.use("/items", itemRouter);
