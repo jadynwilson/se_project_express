@@ -9,39 +9,33 @@ const {
 const createItem = (req, res) => {
   const { name, weather, imageUrl } = req.body;
 
-  ClothingItem.create({ name, weather, imageUrl, owner: req.user._id })
-    .then((items) => {
-      res.status(200).send(items);
-    })
+  return ClothingItem.create({ name, weather, imageUrl, owner: req.user._id })
+    .then((item) => res.status(201).send(item))
     .catch((err) => {
       console.error(err);
       if (err.name === "ValidationError") {
         return res.status(BAD_REQUEST_ERROR).send({ message: "Invalid data" });
       }
-      res
+      return res
         .status(DEFAULT_ERROR)
         .send({ message: "An error has occurred on the server." });
     });
 };
 
-const getItems = (req, res) => {
-  ClothingItem.find({})
-    .then((items) => {
-      res.status(200).send(items);
-    })
+const getItems = (req, res) => ClothingItem.find({})
+    .then((items) => res.status(200).send(items))
     .catch((err) => {
       console.error(err);
-      res
+      return res
         .status(DEFAULT_ERROR)
         .send({ message: "An error has occurred on the server." });
     });
-};
 
 const deleteItem = (req, res) => {
   const userId = req.user._id;
   const { itemId } = req.params;
 
-  ClothingItem.findById(itemId)
+  return ClothingItem.findById(itemId)
     .orFail()
     .then((item) => {
       if (item.owner.toString() !== userId) {
@@ -60,7 +54,12 @@ const deleteItem = (req, res) => {
       if (err.name === "DocumentNotFoundError") {
         return res.status(NOT_FOUND_ERROR).send({ message: "Item not found." });
       }
-      res
+      if (err.name === "CastError") {
+        return res
+          .status(BAD_REQUEST_ERROR)
+          .send({ message: "Invalid item ID." });
+      }
+      return res
         .status(DEFAULT_ERROR)
         .send({ message: "An error occurred on the server." });
     });

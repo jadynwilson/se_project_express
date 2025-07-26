@@ -23,9 +23,9 @@ const likeItem = (req, res) =>
       if (err.name === "CastError") {
         return res.status(BAD_REQUEST_ERROR).send({ message: "Invalid data" });
       }
-      res
+      return res
         .status(DEFAULT_ERROR)
-        .send({ message: "An error has occurred on the server." });
+        .send({ message: "An error has occurred on the server." }); // <=== add return here
     });
 
 const dislikeItem = (req, res) =>
@@ -46,9 +46,9 @@ const dislikeItem = (req, res) =>
       if (err.name === "CastError") {
         return res.status(BAD_REQUEST_ERROR).send({ message: "Invalid data" });
       }
-      res
+      return res
         .status(DEFAULT_ERROR)
-        .send({ message: "An error has occurred on the server." });
+        .send({ message: "An error has occurred on the server." }); // <=== add return here
     });
 
 module.exports = {

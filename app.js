@@ -1,7 +1,6 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const mainRouter = require("./routes/index");
 
 const app = express();
 
@@ -16,12 +15,11 @@ mongoose
   .then(() => {
     console.log("Connected to DB");
   })
-  .catch(console.error);
-
-app.use("/", mainRouter);
+  .catch((err) => {
+    console.error(err);
+  });
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
-
 module.exports = app;
