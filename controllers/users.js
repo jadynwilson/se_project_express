@@ -7,6 +7,7 @@ const {
   NOT_FOUND_ERROR,
   BAD_REQUEST_ERROR,
   CONFLICT_ERROR,
+  UNAUTHORIZED_ERROR,
 } = require("../utils/errors");
 
 const updateCurrentUser = (req, res) => {
@@ -60,7 +61,9 @@ const login = (req, res) => {
     .catch((err) => {
       console.error(err);
       if (err.message === "Incorrect email or password") {
-        return res.status(401).send({ message: "Incorrect email or password" });
+        return res
+          .status(UNAUTHORIZED_ERROR)
+          .send({ message: "Incorrect email or password" });
       }
       return res
         .status(DEFAULT_ERROR)
