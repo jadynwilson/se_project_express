@@ -1,13 +1,35 @@
-# WTWR (What to Wear?): Back End
+# WTWR (What To Wear?)
 
-This project is the back-end portion of the WTWR web application. It focuses on implementing error handling and thorough testing. The project uses Mongoose to interact with the MongoDB database. The goal of this sprint was to build a server that provides API along with user authentication and authorization.
+## About the Project
 
-## Running the Project
+WTWR is a full-stack weather-based clothing recommendation app. It fetches real-time weather data based on your location and suggests what clothing items to wear based on the current temperature. Users can create an account, log in, add their own clothing items, like items, and manage their profile.
 
-`npm run start` — to launch the server
+## Functionality
 
-`npm run dev` — to launch the server with the hot reload feature
+- Displays current weather and temperature for a set location
+- Suggests clothing items based on weather conditions (hot, warm, cold)
+- Toggle between Fahrenheit and Celsius
+- User registration and login with JWT authentication
+- Add, view, and delete clothing items
+- Like and unlike clothing items
+- Edit profile name and avatar
+- Protected profile route — only accessible when logged in
+- Session persistence — stays logged in on page refresh
 
-### Testing
+## Technologies and Techniques
 
-Before committing your code, make sure you edit the file `sprint.txt` in the root folder. The file `sprint.txt` should contain the number of the sprint you're currently working on. For ex. 12
+- **React** — functional components, hooks (useState, useEffect, useContext)
+- **React Router** — client-side routing with protected routes
+- **Vite** — build tool and dev server
+- **CSS / BEM** — component-scoped stylesheets following BEM methodology
+- **Context API** — CurrentUserContext and CurrentTemperatureUnitContext
+- **JWT Authentication** — token stored in localStorage
+- **Express.js** — REST API backend
+- **MongoDB / Mongoose** — database and data modeling
+- **OpenWeatherMap API** — real-time weather data
+
+## Links
+
+[Backend Repository](https://github.com/jadynwilson/se_project_express)
+
+[GitHub Pages](https://jadynwilson.github.io/se_project_react/)
