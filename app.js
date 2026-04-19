@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -26,3 +27,13 @@ app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
 module.exports = app;
+
+const errorHandler = require("./middlewares/error-handler");
+app.use(errorHandler);
+
+const { errors } = require("celebrate");
+app.use(errors());
+
+const { requestLogger, errorLogger } = require("./middlewares/logger");
+app.use(requestLogger);
+app.use(errorLogger);

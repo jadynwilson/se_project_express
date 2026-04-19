@@ -1,10 +1,8 @@
 const ClothingItem = require("../models/clothingItem");
-const {
-  DEFAULT_ERROR,
-  NOT_FOUND_ERROR,
-  BAD_REQUEST_ERROR,
-  FORBIDDEN_ERROR,
-} = require("../utils/errors");
+
+const ForbiddenError = require("../errors/ForbiddenError");
+const NotFoundError = require("../errors/NotFoundError");
+const BadRequestError = require("../errors/BadRequestError");
 
 const createItem = (req, res) => {
   const { name, weather, imageUrl } = req.body;
@@ -14,11 +12,10 @@ const createItem = (req, res) => {
     .catch((err) => {
       console.error(err);
       if (err.name === "ValidationError") {
-        return res.status(BAD_REQUEST_ERROR).send({ message: "Invalid data" });
+        next(new BadRequestError("Invalid data"));
+      } else {
+        next(err);
       }
-      return res
-        .status(DEFAULT_ERROR)
-        .send({ message: "An error has occurred on the server." });
     });
 };
 
@@ -26,10 +23,7 @@ const getItems = (req, res) =>
   ClothingItem.find({})
     .then((items) => res.status(200).send(items))
     .catch((err) => {
-      console.error(err);
-      return res
-        .status(DEFAULT_ERROR)
-        .send({ message: "An error has occurred on the server." });
+      next(err);
     });
 
 const deleteItem = (req, res) => {
@@ -40,9 +34,8 @@ const deleteItem = (req, res) => {
     .orFail()
     .then((item) => {
       if (item.owner.toString() !== userId) {
-        return res
-          .status(FORBIDDEN_ERROR)
-          .send({ message: "You cannot delete items owned by others." });
+        next(new ForbiddenError("You cannot delete items owned by others."));
+        return;
       }
 
       return item
@@ -53,16 +46,12 @@ const deleteItem = (req, res) => {
     })
     .catch((err) => {
       if (err.name === "DocumentNotFoundError") {
-        return res.status(NOT_FOUND_ERROR).send({ message: "Item not found." });
+        next(new NotFoundError("Item not Found"));
+      } else if (err.name === "CastError") {
+        next(new BadRequestError("Invalid item ID."));
+      } else {
+        next(err);
       }
-      if (err.name === "CastError") {
-        return res
-          .status(BAD_REQUEST_ERROR)
-          .send({ message: "Invalid item ID." });
-      }
-      return res
-        .status(DEFAULT_ERROR)
-        .send({ message: "An error occurred on the server." });
     });
 };
 

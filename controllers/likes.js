@@ -1,11 +1,8 @@
 const ClothingItem = require("../models/clothingItem");
-const {
-  DEFAULT_ERROR,
-  NOT_FOUND_ERROR,
-  BAD_REQUEST_ERROR,
-} = require("../utils/errors");
+const NotFoundError = require("../errors/NotFoundError");
+const BadRequestError = require("../errors/BadRequestError");
 
-const likeItem = (req, res) =>
+const likeItem = (req, res, next) =>
   ClothingItem.findByIdAndUpdate(
     req.params.itemId,
     { $addToSet: { likes: req.user._id } },
@@ -16,19 +13,15 @@ const likeItem = (req, res) =>
     .catch((err) => {
       console.error(err);
       if (err.name === "DocumentNotFoundError") {
-        return res
-          .status(NOT_FOUND_ERROR)
-          .send({ message: "The requested resource was not found." });
+        next(new NotFoundError("The requested resource was not found."));
+      } else if (err.name === "CastError") {
+        next(new BadRequestError("Invalid Data"));
+      } else {
+        next(err);
       }
-      if (err.name === "CastError") {
-        return res.status(BAD_REQUEST_ERROR).send({ message: "Invalid data" });
-      }
-      return res
-        .status(DEFAULT_ERROR)
-        .send({ message: "An error has occurred on the server." }); // <=== add return here
     });
 
-const dislikeItem = (req, res) =>
+const dislikeItem = (req, res, next) =>
   ClothingItem.findByIdAndUpdate(
     req.params.itemId,
     { $pull: { likes: req.user._id } },
@@ -39,16 +32,12 @@ const dislikeItem = (req, res) =>
     .catch((err) => {
       console.error(err);
       if (err.name === "DocumentNotFoundError") {
-        return res
-          .status(NOT_FOUND_ERROR)
-          .send({ message: "The requested resource was not found." });
+        next(new NotFoundError("The requested resource was not found."));
+      } else if (err.name === "CastError") {
+        next(new BadRequestError("Invalid data"));
+      } else {
+        next(err);
       }
-      if (err.name === "CastError") {
-        return res.status(BAD_REQUEST_ERROR).send({ message: "Invalid data" });
-      }
-      return res
-        .status(DEFAULT_ERROR)
-        .send({ message: "An error has occurred on the server." }); // <=== add return here
     });
 
 module.exports = {

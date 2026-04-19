@@ -1,4 +1,4 @@
-const DEFAULT_ERROR = 500;
+/* const DEFAULT_ERROR = 500;
 const NOT_FOUND_ERROR = 404;
 const BAD_REQUEST_ERROR = 400;
 const UNAUTHORIZED_ERROR = 401;
@@ -13,3 +13,4 @@ module.exports = {
   FORBIDDEN_ERROR,
   CONFLICT_ERROR,
 };
+*/
