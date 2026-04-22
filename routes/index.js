@@ -13,15 +13,6 @@ const {
 
 router.post("/signup", validateUserBody, createUser);
 router.post("/signin", validateLogin, login);
-
-router.use(auth);
-
-router.use("/users", userRouter);
-router.use("/items", clothingItemsRouter);
-router.use("/items", likesRouter);
-
-router.post("/signup", createUser);
-router.post("/signin", login);
 router.get("/items", getItems);
 
 router.use(auth);
