@@ -28,8 +28,15 @@ WTWR is a full-stack weather-based clothing recommendation app. It fetches real-
 - **MongoDB / Mongoose** — database and data modeling
 - **OpenWeatherMap API** — real-time weather data
 
+## Deployed Project
+
+Frontend: https://jmwtwr.jumpingcrab.com
+Backend API: https://api.jmwtwr.jumpingcrab.com
+
 ## Links
 
 [Backend Repository](https://github.com/jadynwilson/se_project_express)
 
-[GitHub Pages](https://jadynwilson.github.io/se_project_react/)
+[Frontend GitHub Repo](https://jadynwilson.github.io/se_project_react/)
+
+[Project Pitch Video](https://www.loom.com/share/3cb45d2ff99c406c8b69fa72eca24b6d)
